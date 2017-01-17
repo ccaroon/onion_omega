@@ -1,0 +1,14 @@
+{
+  "name": "kombucha_monitor",
+  "version": "0.0.1",
+  "description": "",
+  "main": "kombucha.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ccaroon",
+  "license": "ISC",
+  "dependencies": {
+    "omega_gpio": "^0.1.0"
+  }
+}
