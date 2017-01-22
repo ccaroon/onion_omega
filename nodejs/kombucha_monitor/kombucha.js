@@ -1,34 +1,47 @@
 #!/usr/bin/env node
 //---------------------------------------------------------------------------------
 var Blynk = require('/usr/bin/blynk-library');
-var LED = require("omega_gpio").LED;
-
-var led = new LED(1);
+const fs = require('fs');
 
 var omega = new Blynk.Blynk('6cf5e1bd4e5d45b18c4c5a47e8aa1fbc');
 var v1 = new omega.VirtualPin(1);
 var v2 = new omega.VirtualPin(2);
 var v3 = new omega.VirtualPin(3);
 
-//var startedAt = Date.parse("Jan 14, 2017 12:30");
-var startedAt = Date.parse("Feb 19, 1971 4:30");
+var startedAt = Date.parse("Jan 14, 2017 12:30");
 
 v1.on('write', function(params) {
-    console.log("V1 Pushed");
     startedAt = Date.now();
 });
 
 
-v2.on('read', function() {
+//v2.on('read', function() {
+//    updateBrewTime();
+//});
+
+//v3.on('read', function() {
+//    updateTemperature();
+//});
+
+setInterval(function() {
+    updateBrewTime();
+    updateTemperature();
+}, 5000);
+
+
+function updateBrewTime() {
     var d = durationToString(startedAt, Date.now());
     v2.write(d);
-});
+}
 
-v3.on('write', function(params) {
-    console.log("V3:" + params);
-    led.toggle();
-});
-
+function updateTemperature() {
+    var data = fs.readFileSync('/sys/devices/w1_bus_master1/28-000006576fb0/w1_slave', 'utf8');
+    var lines = data.split("\n");
+    var matches = lines[1].match(/t=(\d+)/);
+    var temp = matches[1]/1000.0
+    temp = (temp * 1.8) + 32.0;
+    v3.write(Math.round(temp));
+}
 
 function durationToString(start, end) {
 
@@ -52,8 +65,3 @@ function durationToString(start, end) {
 
     return (dStr);
 }
-
-process.on('SIGINT', function(){
-    led.destroy();
-    process.exit();
-});
