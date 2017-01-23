@@ -1,37 +1,28 @@
 #!/usr/bin/env node
-//---------------------------------------------------------------------------------
-var Blynk = require('/usr/bin/blynk-library');
-const fs = require('fs');
+/******************************************************************************/
+const Blynk = require('/usr/bin/blynk-library');
+const fs    = require('fs');
 
 var omega = new Blynk.Blynk('6cf5e1bd4e5d45b18c4c5a47e8aa1fbc');
-var v1 = new omega.VirtualPin(1);
-var v2 = new omega.VirtualPin(2);
-var v3 = new omega.VirtualPin(3);
+var resetButton = new omega.VirtualPin(1);
+var brewTime    = new omega.VirtualPin(2);
+var temperature = new omega.VirtualPin(3);
 
 var startedAt = Date.parse("Jan 14, 2017 12:30");
 
-v1.on('write', function(params) {
+resetButton.on('write', function(params) {
     startedAt = Date.now();
+    updateBrewTime();
 });
-
-
-//v2.on('read', function() {
-//    updateBrewTime();
-//});
-
-//v3.on('read', function() {
-//    updateTemperature();
-//});
 
 setInterval(function() {
     updateBrewTime();
     updateTemperature();
 }, 5000);
 
-
 function updateBrewTime() {
     var d = durationToString(startedAt, Date.now());
-    v2.write(d);
+    brewTime.write(d);
 }
 
 function updateTemperature() {
@@ -40,7 +31,7 @@ function updateTemperature() {
     var matches = lines[1].match(/t=(\d+)/);
     var temp = matches[1]/1000.0
     temp = (temp * 1.8) + 32.0;
-    v3.write(Math.round(temp));
+    temperature.write(Math.round(temp));
 }
 
 function durationToString(start, end) {
