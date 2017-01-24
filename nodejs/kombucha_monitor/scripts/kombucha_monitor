@@ -3,14 +3,13 @@
 START=99
 STOP=99
 
-# TODO: Put in correct code location
-CODE_LOC=/root
+CODE_LOC=/root/onion_omega/nodejs/kombucha_monitor
 PID_FILE=/var/run/kombucha_monitor.pid
 
 start() {
     # TODO: don't start if PID already exists
     # TODO: Do I need to background the process?
-    ($CODE_LOC/onion_omega/nodejs/kombucha_monitor/kombucha.js)&
+    ($CODE_LOC/kombucha.js > /var/log/kombucha_monitor.log)&
     echo $! > $PID_FILE
 }
 
