@@ -31,7 +31,7 @@ function updateTemperature() {
     var matches = lines[1].match(/t=(\d+)/);
     var temp = matches[1]/1000.0
     temp = (temp * 1.8) + 32.0;
-    temperature.write(Math.round(temp));
+    temperature.write(temp.toFixed(1));
 }
 
 function durationToString(start, end) {
