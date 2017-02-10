@@ -8,7 +8,7 @@ var resetButton = new omega.VirtualPin(1);
 var brewTime    = new omega.VirtualPin(2);
 var temperature = new omega.VirtualPin(3);
 
-var startedAt = Date.parse("Jan 14, 2017 12:30");
+var startedAt = Date.parse("Feb 8, 2017 20:30");
 
 resetButton.on('write', function(params) {
     startedAt = Date.now();
@@ -26,7 +26,7 @@ function updateBrewTime() {
 }
 
 function updateTemperature() {
-    var data = fs.readFileSync('/sys/devices/w1_bus_master1/28-000006576fb0/w1_slave', 'utf8');
+    var data = fs.readFileSync('/sys/devices/w1_bus_master1/28-00000609dd3e/w1_slave', 'utf8');
     var lines = data.split("\n");
     var matches = lines[1].match(/t=(\d+)/);
     var temp = matches[1]/1000.0
