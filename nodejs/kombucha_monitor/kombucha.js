@@ -8,7 +8,7 @@ var resetButton = new omega.VirtualPin(1);
 var brewTime    = new omega.VirtualPin(2);
 var temperature = new omega.VirtualPin(3);
 
-var startedAt = Date.parse("Feb 8, 2017 20:30");
+var startedAt = Date.parse("Feb 20, 2017 20:00");
 
 resetButton.on('write', function(params) {
     startedAt = Date.now();

@@ -3,7 +3,7 @@
 START=99
 STOP=99
 
-CODE_LOC=/root/onion_omega/nodejs/kombucha_monitor
+CODE_LOC=/root/src/onion_omega/nodejs/kombucha_monitor
 PID_FILE=/var/run/kombucha_monitor.pid
 
 start() {
