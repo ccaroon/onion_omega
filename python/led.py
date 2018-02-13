@@ -1,10 +1,15 @@
 import omega_gpio as gpio
 import time
 
-while True:
+PIN = 7
+WAIT = 1
+gpio.initpin(PIN,'out')
+gpio.setoutput(PIN,0)
 
-    gpio.initpin(13,'out')
-    gpio.setoutput(13,1)
-    time.sleep(5)
-    gpio.setoutput(13,0)
+while True:
+    gpio.setoutput(PIN,1)
+    time.sleep(WAIT)
+
+    gpio.setoutput(PIN,0)
+    time.sleep(WAIT)
 
