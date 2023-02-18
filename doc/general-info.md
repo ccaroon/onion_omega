@@ -13,6 +13,8 @@ Can do this if you use up all the space and want to start over.
 ## WiFi
 1. `wifisetup`
 
+## SSH Access
+`ssh -oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa root@ONION-IP-ADDR`
 
 ## Format SD
 1. Find mount point: `/mnt/mmcblk0p1`
