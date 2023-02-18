@@ -1,4 +1,4 @@
-import secrets
+import lib.secrets as secrets
 import urequests as requests
 
 class AdafruitIO:
