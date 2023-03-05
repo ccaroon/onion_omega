@@ -16,12 +16,22 @@ Can do this if you use up all the space and want to start over.
 ## SSH Access
 `ssh -oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa root@ONION-IP-ADDR`
 
+### Key Pair
+Public key needs to be added to `/etc/dropbear/authorized_keys`
+
 ## Format SD
 1. Find mount point: `/mnt/mmcblk0p1`
 2. Find Device Name: `/dev/mmcblk0p1`
 3. `umount /mnt/mmcblk0p1`
 4. `mkfs.ext4 /dev/mmcblk0p1`
 5. Remount or reboot for auto-mounting
+
+## TimeZone
+https://github.com/openwrt/luci/blob/master/modules/luci-base/ucode/zoneinfo.uc
+
+1. `uci set system.@system[0].timezone='EST5EDT,M3.2.0,M11.1.0'`
+2. `uci commit`
+3. reboot
 
 ## Development
 ### Base

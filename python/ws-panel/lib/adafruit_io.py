@@ -1,5 +1,5 @@
 import lib.secrets as secrets
-import requests as requests
+import urequests as requests
 
 class AdafruitIO:
     BASE_URL = "https://io.adafruit.com/api/v2"
