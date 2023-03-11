@@ -47,3 +47,9 @@ https://github.com/openwrt/luci/blob/master/modules/luci-base/ucode/zoneinfo.uc
 1. `opkg update`
 2. `opkg install nodejs`
 3. `opkg install blynk-library`
+
+## Running a Command on Boot
+Remember `nohup` and `&`
+
+1. Edit `/etc/rc.local`
+2. `sh <script-to-execute>`

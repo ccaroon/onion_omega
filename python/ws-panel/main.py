@@ -34,6 +34,7 @@ if __name__ == "__main__":
     curr_label = Label(0,100)
     high_label = Label(100,100)
     when_label = Label(-17,-110)
+    msg_label = Label(-50, 85)
 
     led = LED(0, 0, lv.color_make(0x0, 0x0, 0x0))
     led.on()
@@ -43,6 +44,7 @@ if __name__ == "__main__":
         now = time.time()
 
         if now - last_update > UPDATE_INTERVAL:
+            time_color = "000000"
             last_update = now
 
             try:
@@ -64,11 +66,16 @@ if __name__ == "__main__":
                 low_label.text(temp_info[0], "0000ff")
                 high_label.text(temp_info[1], "ff0000")
                 curr_label.text(temp_info[2], "000000")
-                when_label.text(time.strftime("%H:%M:%S"))
+                msg_label.text("")
             except Exception as err:
                 msg = str(err)
                 print(msg)
-                when_label.text(msg, "ff0000")
+                time_color = "ff0000"
+                msg_label.text(msg, "ff0000")
+                led.color(lv.color_make(0xff,0x0,0x0))
+            finally:
+                when_label.text(time.strftime("%H:%M:%S"), time_color)
+
 
 
 
