@@ -1,79 +1,74 @@
+#!/usr/bin/micropython
 import time
 import lvgl as lv
-import fb
-# from lv_colors import lv_colors
 
 from lib.weather_station import WeatherStation
-
-# TODO: move to a Class
-def init_screen():
-    lv.init()
-    fb.init()
-
-    disp_buf1 = lv.disp_buf_t()
-    buf1_1 = bytearray(320*10)
-    lv.disp_buf_init(disp_buf1, buf1_1, None, len(buf1_1)//4)
-
-    disp_drv = lv.disp_drv_t()
-    lv.disp_drv_init(disp_drv)
-    disp_drv.buffer = disp_buf1
-    disp_drv.flush_cb = fb.flush
-    lv.disp_drv_register(disp_drv)
-
-    scr = lv.obj()
-
-    return scr
+from lib.screen import Screen
+import lib.widgets as widgets
 # -----------------------------------------------------------------------------
-def new_gauge():
-    # needle colors
-    needle_colors=[
-        lv.color_make(0x0, 0x0, 0xff),
-        lv.color_make(0xff, 0x0, 0x0),
-        lv.color_make(0x0, 0x0, 0x0)
-    ]
-
-    # create the gauge
-    gauge = lv.gauge(lv.scr_act(), None)
-    gauge.set_needle_count(3, needle_colors)
-    gauge.set_size(200,200)
-    gauge.set_range(0,110)
-    gauge.set_scale(260, 12, 12)
-    # gauge.set_critical_value(90)
-    gauge.align(None,lv.ALIGN.CENTER,0,0)
-
-    return gauge
-
-def new_label(x,y):
-    label = lv.label(lv.scr_act())
-
-    label.set_recolor(True)
-    label.align(lv.scr_act(), lv.ALIGN.CENTER, x, y)
-
-    return label
+def update_bar(bar, value):
+    bar.set_value(value, lv.ANIM.ON)
 
 def update_label(label, value, color="000000"):
     label.set_text("#%s %s#" % (color, value))
+
+def update_led_color(led, main_color, grad_color=None):
+    style = led.get_style(lv.led.STYLE.MAIN)
+    style.body.main_color = main_color
+    style.body.grad_color = grad_color or main_color
 
 def update_gauge(gauge, data):
     gauge.set_value(0, data[0])
     gauge.set_value(1, data[2])
     gauge.set_value(2, data[1])
 
+def temp_to_color(temp):
+    color = lv.color_make(0xff, 0xff, 0xff)
+
+    if temp <= 25:
+        # white
+        color = lv.color_make(0xff, 0xff, 0xff)
+    elif temp > 25 and temp <= 32:
+        # bluish/white
+        color = lv.color_make(0xe4,0xf0,0xfb)
+    elif temp > 32 and temp <= 55:
+        # blue
+        color = lv.color_make(0x04,0x7f,0xfb)
+    elif temp > 55 and temp <= 64:
+        # cyan
+        color = lv.color_make(0x04,0xfb,0xe8)
+    elif temp > 64 and temp <= 75:
+        # green
+        color = lv.color_make(0x33,0xe1,0x08)
+    elif temp > 75 and temp <= 85:
+        # yellow
+        color = lv.color_make(0xf9,0xf5,0x04)
+    elif temp > 85 and temp <= 95:
+        # orange
+        color = lv.color_make(0xf9,0x73,0x04)
+    else:
+        # red
+        color = lv.color_make(0xff,0x00,0x00)
+
+    return color
+
+# -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 UPDATE_INTERVAL = 3 * 60
 
 if __name__ == "__main__":
+    Screen.init()
     station = WeatherStation()
-    screen = init_screen()
 
-    # Load the screen
-    lv.scr_load(screen)
+    gauge = widgets.new_gauge()
+    humidity = widgets.new_bar(30,200,130,0)
+    low_label =  widgets.new_label(-100,100)
+    curr_label = widgets.new_label(0,100)
+    high_label = widgets.new_label(100,100)
+    when_label = widgets.new_label(-17,-110)
 
-    gauge = new_gauge()
-    low_label = new_label(-100,100)
-    curr_label = new_label(0,100)
-    high_label = new_label(100,100)
-    when_label = new_label(-17,-110)
+    led = widgets.new_led(0,0, lv.color_make(0,0,0))
+    led.on()
 
     last_update = 0
     while True:
@@ -82,10 +77,14 @@ if __name__ == "__main__":
         if now - last_update > UPDATE_INTERVAL:
             last_update = now
             temp_info = station.get_temp_info()
+            humd = station.get_humidity()
 
-            print(temp_info)
+            print(temp_info, humd)
 
             update_gauge(gauge, temp_info)
+            update_bar(humidity, humd)
+
+            update_led_color(led, temp_to_color(temp_info[1]))
 
             update_label(low_label, temp_info[0], "0000ff")
             update_label(curr_label, temp_info[1], "000000")

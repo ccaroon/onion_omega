@@ -16,6 +16,10 @@ class WeatherStation:
         data = self.__aio.get_data("temperature-low")
         return int(data["results"][0]["value"])
 
+    def get_humidity(self):
+        data = self.__aio.get_data("humidity")
+        return int(data["results"][0]["value"])
+
     def get_temp_info(self):
         info = (
             self.get_low_temp(),

@@ -12,5 +12,6 @@ https://onion.io/omega2-dash-guide/
 
 ### Graphics
 * https://github.com/OnionIoT/lv_micropython/tree/master/examples/onion
-* https://docs.lvgl.io/7.11/intro/index.html
+* https://docs.lvgl.io/6.1/get-started/index.html
 * https://github.com/uraich/lv_mpy_examples_v8
+  - v8. Don't work with Dash which seems to use v6
