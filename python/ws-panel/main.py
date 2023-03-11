@@ -14,21 +14,23 @@ import lib.utils as utils
 UPDATE_INTERVAL = 1 * 60
 
 if __name__ == "__main__":
+    # **Must** happen __before__ any widgets can be created
     Screen.init()
+
     station = WeatherStation()
 
     gauge = Gauge(
-        175, 175, 0, 0,
+        200, 200, 0, 0,
         count = 3,
         colors = [
-            lv.color_make(0x0, 0x0, 0xff),
-            lv.color_make(0xff, 0x0, 0x0),
-            lv.color_make(0x0, 0x0, 0x0)
+            lv.color_make(0x0, 0x0, 0xff), # low
+            lv.color_make(0xff, 0x0, 0x0), # high
+            lv.color_make(0x0, 0x0, 0x0)   # current
         ]
     )
 
     humidity = Bar(20, 175, 130, 0)
-    low_label =  Label(-100,100)
+    low_label = Label(-100,100)
     curr_label = Label(0,100)
     high_label = Label(100,100)
     when_label = Label(-17,-110)
@@ -42,21 +44,31 @@ if __name__ == "__main__":
 
         if now - last_update > UPDATE_INTERVAL:
             last_update = now
-            temp_info = station.get_temp_info()
-            humd = station.get_humidity()
 
-            print(temp_info, humd)
+            try:
+                temp_info = station.get_temp_info()
+                humd = station.get_humidity()
+                print("Low [%d] | Current [%d] | High [%d] | Humidity [%d%%]" % (
+                    temp_info[0],
+                    temp_info[2],
+                    temp_info[1],
+                    humd
+                ))
 
-            gauge.update(temp_info)
+                gauge.update(temp_info)
 
-            humidity.value = humd
+                humidity.value = humd
 
-            led.color(utils.temp_to_color(temp_info[1]))
+                led.color(utils.temp_to_color(temp_info[1]))
 
-            low_label.text(temp_info[0], "0000ff")
-            curr_label.text(temp_info[1], "000000")
-            high_label.text(temp_info[2], "ff0000")
-            when_label.text(time.strftime("%H:%M:%S"))
+                low_label.text(temp_info[0], "0000ff")
+                high_label.text(temp_info[1], "ff0000")
+                curr_label.text(temp_info[2], "000000")
+                when_label.text(time.strftime("%H:%M:%S"))
+            except Exception as err:
+                msg = str(err)
+                when_label.text(msg, "ff0000")
+
 
 
 
