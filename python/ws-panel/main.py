@@ -11,7 +11,7 @@ from lib.widgets.label import Label
 
 import lib.utils as utils
 # -----------------------------------------------------------------------------
-UPDATE_INTERVAL = 1 * 60
+UPDATE_INTERVAL = 2 * 60
 
 if __name__ == "__main__":
     # **Must** happen __before__ any widgets can be created
