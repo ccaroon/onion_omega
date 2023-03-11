@@ -23,7 +23,7 @@ class WeatherStation:
     def get_temp_info(self):
         info = (
             self.get_low_temp(),
+            self.get_high_temp(),
             self.get_temp(),
-            self.get_high_temp()
         )
         return info
