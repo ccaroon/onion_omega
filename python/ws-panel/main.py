@@ -67,14 +67,8 @@ if __name__ == "__main__":
                 when_label.text(time.strftime("%H:%M:%S"))
             except Exception as err:
                 msg = str(err)
+                print(msg)
                 when_label.text(msg, "ff0000")
-
-
-
-
-
-
-
 
 
 
