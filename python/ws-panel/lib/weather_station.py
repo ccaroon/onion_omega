@@ -1,8 +1,9 @@
 from lib.adafruit_io import AdafruitIO
 
 class WeatherStation:
-    def __init__(self):
-        self.__aio = AdafruitIO("weather-station")
+    def __init__(self, is_dev = False):
+        group_name = "weather-station%s" % ("-dev" if is_dev else "")
+        self.__aio = AdafruitIO(group_name)
 
     def get_temp(self):
         data = self.__aio.get_data("temperature")

@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # **Must** happen __before__ any widgets can be created
     Screen.init()
 
-    station = WeatherStation()
+    station = WeatherStation(is_dev=True)
 
     gauge = Gauge(
         200, 200, 0, 0,
@@ -30,6 +30,7 @@ if __name__ == "__main__":
     )
 
     humidity = Bar(20, 175, 130, 0)
+    humd_label = Label(133,100)
     low_label = Label(-100,100)
     curr_label = Label(0,100)
     high_label = Label(100,100)
@@ -60,8 +61,9 @@ if __name__ == "__main__":
                 gauge.update(temp_info)
 
                 humidity.value = humd
+                humd_label.text("%d%%" % (humd), "000000")
 
-                led.color(utils.temp_to_color(temp_info[1]))
+                led.color(utils.temp_to_color(temp_info[2]))
 
                 low_label.text(temp_info[0], "0000ff")
                 high_label.text(temp_info[1], "ff0000")
